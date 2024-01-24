@@ -23,5 +23,6 @@ jobs:
             cd ~/repo/api_server
             git pull
             source ~/.nvm/nvm.sh
+            npm ci
             npm run build
             pm2 start dist/main.js --name api_server
