@@ -41,7 +41,7 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
-  @Post('/changePassword')
+  @Post('/change-password')
   async changePassword(@Body() dto: ChangePasswordDTO, @Req() request: any) {
     if (dto.nickname !== request.user.sub) {
       throw new UnauthorizedException();
@@ -49,11 +49,11 @@ export class UserController {
 
     const user = await this.userService.getUser(dto.nickname);
 
-    if (dto.oldPassword !== user.password) {
+    if (dto.old_password !== user.password) {
       throw new UnauthorizedException();
     }
     
-    this.userService.changePassword(dto.nickname, dto.newPassword);
+    this.userService.changePassword(dto.nickname, dto.new_password);
     return generateUserMessage(UserMessage.PASSWORD_CHANGED);
   }
 
