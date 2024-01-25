@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IUserRepository } from 'src/domain/user/IUserRepository';
-import { User } from 'src/domain/user/User';
+import { IUserRepository } from 'src/infra/user/IUserRepository';
+import { User } from 'src/model/user/User';
 import { HashEncryptor } from 'src/utils/Hash';
 import { Random } from 'src/utils/Random';
 
@@ -14,7 +14,8 @@ export class UserService {
     user.salt = Random.generateRandomString(32);
     user.password = HashEncryptor.generateHash(user.password, user.salt);
     const createdUser = await this.userRepository.create(user);
-    return await this.userRepository.save(createdUser);
+    let savedUser = await this.userRepository.save(createdUser);
+    return savedUser;
   }
 
   public async changePassword(nickname: string, password: string) {

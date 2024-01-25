@@ -4,24 +4,27 @@ import {
   CreateUserDTO,
   DeleteAccountDTO,
   SignInDTO,
-} from './RequestDTOs';
+} from '../model/user/UserRequest';
 import { UserMapper } from 'src/mapper/UserMapper';
-import { UserService } from 'src/application/user/UserService';
-import { UserMessage, generateUserMessage } from './UserMessage';
-import { AuthService } from 'src/application/auth/AuthService';
+import { UserService } from 'src/service/user/UserService';
+import { UserMessage, generateUserMessage } from '../model/user/UserMessage';
+import { AuthService } from 'src/service/auth/AuthService';
 import { AuthGuard } from 'src/infra/security/AuthGuard';
+import { MailService } from 'src/service/mail/MailService';
 
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
+    private readonly mailService: MailService,
   ) {}
 
   @Post()
   async signUp(@Body() dto: CreateUserDTO) {
     const user = UserMapper.createUserDTOToUser(dto);
     this.userService.createUser(user);
+    this.mailService.sendEmail(user.email, user.nickname);
     return generateUserMessage(UserMessage.USER_CREATED);
   }
 

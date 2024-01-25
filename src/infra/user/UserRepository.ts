@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { IUserRepository } from 'src/domain/user/IUserRepository';
-import { User } from 'src/domain/user/User';
+import { IUserRepository } from 'src/infra/user/IUserRepository';
+import { User } from 'src/model/user/User';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -15,14 +15,19 @@ export class UserRepository implements IUserRepository {
   }
 
   async softDelete(nickname: string): Promise<void> {
-    this.userRepository.softDelete({ nickname: nickname });
+    await this.userRepository.softDelete({ nickname: nickname });
   }
 
   async save(user: Partial<User>): Promise<User> {
-    return this.userRepository.save(user);
+    try {
+      return await this.userRepository.save(user);
+    } catch {
+      console.log("error");
+    }
+    
   }
 
   async findByNickname(nickname: string): Promise<User> {
-    return this.userRepository.findOne({ where: { nickname: nickname } });
+    return await this.userRepository.findOne({ where: { nickname: nickname } });
   }
 }

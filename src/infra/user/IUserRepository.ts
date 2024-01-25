@@ -1,4 +1,4 @@
-import { User } from './User';
+import { User } from '../../model/user/User';
 
 export interface IUserRepository {
   findByNickname(nickname: string): Promise<User>;
