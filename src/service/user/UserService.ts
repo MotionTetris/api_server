@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IUserRepository } from 'src/infra/user/IUserRepository';
 import { User } from 'src/model/user/User';
 import { HashEncryptor } from 'src/utils/Hash';
@@ -21,14 +21,14 @@ export class UserService {
   public async changePassword(nickname: string, password: string) {
     const user = await this.userRepository.findByNickname(nickname);
     user.password = HashEncryptor.generateHash(password, user.salt);
-    this.userRepository.save(user);
+    await this.userRepository.save(user);
   }
 
   public async deleteUser(nickname: string) {
-    this.userRepository.softDelete(nickname);
+    await this.userRepository.softDelete(nickname);
   }
 
   public async getUser(nickname: string) {
-    return this.userRepository.findByNickname(nickname);
+    return await this.userRepository.findByNickname(nickname);
   }
 }

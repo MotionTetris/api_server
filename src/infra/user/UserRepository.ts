@@ -19,12 +19,7 @@ export class UserRepository implements IUserRepository {
   }
 
   async save(user: Partial<User>): Promise<User> {
-    try {
-      return await this.userRepository.save(user);
-    } catch {
-      console.log("error");
-    }
-    
+    return await this.userRepository.save(user);
   }
 
   async findByNickname(nickname: string): Promise<User> {

@@ -23,21 +23,21 @@ export class UserController {
   @Post()
   async signUp(@Body() dto: CreateUserDTO) {
     const user = UserMapper.createUserDTOToUser(dto);
-    this.userService.createUser(user);
-    this.mailService.sendEmail(user.email, user.nickname);
+    await this.userService.createUser(user);
+    await this.mailService.sendEmail(user.email, user.nickname);
     return generateUserMessage(UserMessage.USER_CREATED);
   }
 
   @Post('/signin')
   async signIn(@Body() dto: SignInDTO) {
-    const token = this.authService.signIn(dto.nickname, dto.password);
+    const token = await this.authService.signIn(dto.nickname, dto.password);
     return token;
   }
 
   @UseGuards(AuthGuard)
   @Get('/:nickname')
   async getProfile(@Param('nickname') nickname: string) {
-    return this.userService.getUser(nickname);
+    return await this.userService.getUser(nickname);
   }
 
   @UseGuards(AuthGuard)
@@ -53,7 +53,7 @@ export class UserController {
       throw new UnauthorizedException();
     }
     
-    this.userService.changePassword(dto.nickname, dto.new_password);
+    await this.userService.changePassword(dto.nickname, dto.new_password);
     return generateUserMessage(UserMessage.PASSWORD_CHANGED);
   }
 
@@ -63,7 +63,7 @@ export class UserController {
     if (dto.nickname !== request.user.sub) {
       throw new UnauthorizedException();
     }
-    this.userService.deleteUser(dto.nickname);
+    await this.userService.deleteUser(dto.nickname);
     return generateUserMessage(UserMessage.USER_DELETED);
   }
 }
