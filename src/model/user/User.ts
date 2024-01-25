@@ -25,6 +25,15 @@ export class User {
   @Column()
   salt: string;
 
+  @Column()
+  verified: boolean;
+
+  @Column({ nullable: true })
+  verifyCode?: string | undefined;
+
+  @Column({ nullable: true})
+  signUpIp?: string | undefined;
+
   @CreateDateColumn()
   createdAt: Date;
 

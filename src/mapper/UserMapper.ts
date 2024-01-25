@@ -9,6 +9,7 @@ export class UserMapper {
       nickname: dto.nickname,
       email: dto.email,
       password: dto.password,
+      verified: false,
     };
 
     return partialUser;

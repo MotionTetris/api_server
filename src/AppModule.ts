@@ -3,7 +3,6 @@ import { ControllerModule } from './controller/ControllerModule';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DBSERVER_HOST, DBMS_NAME, DB_PASSWORD, DB_USERNAME, DBSERVER_PORT, DB_NAME, MAIL_REDIS_HOST, MAIL_REDIS_PORT } from './constants';
 import { BullModule } from '@nestjs/bull';
-import { MailProcessor } from './infra/mail/MailProcessor';
 import { APP_FILTER } from '@nestjs/core';
 import { GlobalExceptionFilter } from './filter/GlobalExceptionFilter';
 import { User } from './model/user/User';
@@ -34,9 +33,10 @@ const MAIL_REDIS_OPTION = {
     BullModule.forRoot(MAIL_REDIS_OPTION),
   ],
   controllers: [],
-  providers: [MailProcessor, {
+  providers: [{
     provide: APP_FILTER,
     useClass: GlobalExceptionFilter
-  }],
+  },
+  ],
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Ip, Param, Post, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import {
   ChangePasswordDTO,
   CreateUserDTO,
@@ -21,16 +21,22 @@ export class UserController {
   ) {}
 
   @Post()
-  async signUp(@Body() dto: CreateUserDTO) {
-    const user = UserMapper.createUserDTOToUser(dto);
-    await this.userService.createUser(user);
-    await this.mailService.sendEmail(user.email, user.nickname);
-    return generateUserMessage(UserMessage.USER_CREATED);
+  async signUp(@Body() dto: CreateUserDTO, @Ip() ip: string) {
+    let user = UserMapper.createUserDTOToUser(dto);
+    user = await this.userService.createUser(user, ip);
+    await this.mailService.sendVerifyEmail(user.email, user.nickname, user.verifyCode);
+    return generateUserMessage(UserMessage.SUCC_USER_CREATED);
+  }
+
+  @Get('/verify/:nickname/:uuid')
+  async verifyUser(@Param('nickname') nickname: string, @Param('uuid') uuid: string, @Ip() ip: string) {
+    await this.userService.verifyUser(nickname, uuid, ip);
+    return generateUserMessage(UserMessage.SUCC_VERIFY_USER);
   }
 
   @Post('/signin')
-  async signIn(@Body() dto: SignInDTO) {
-    const token = await this.authService.signIn(dto.nickname, dto.password);
+  async signIn(@Body() dto: SignInDTO, @Ip() ip: string) {
+    const token = await this.authService.signIn(dto.nickname, dto.password, ip);
     return token;
   }
 
@@ -43,27 +49,14 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Post('/change-password')
   async changePassword(@Body() dto: ChangePasswordDTO, @Req() request: any) {
-    if (dto.nickname !== request.user.sub) {
-      throw new UnauthorizedException();
-    }
-
-    const user = await this.userService.getUser(dto.nickname);
-
-    if (dto.old_password !== user.password) {
-      throw new UnauthorizedException();
-    }
-    
-    await this.userService.changePassword(dto.nickname, dto.new_password);
-    return generateUserMessage(UserMessage.PASSWORD_CHANGED);
+    await this.userService.changePassword(request.user.sub, dto.old_password, dto.new_password);
+    return generateUserMessage(UserMessage.SUCC_PASSWORD_CHANGED);
   }
 
   @UseGuards(AuthGuard)
   @Post('/bye')
   async deleteAccount(@Body() dto: DeleteAccountDTO, @Req() request: any) {
-    if (dto.nickname !== request.user.sub) {
-      throw new UnauthorizedException();
-    }
     await this.userService.deleteUser(dto.nickname);
-    return generateUserMessage(UserMessage.USER_DELETED);
+    return generateUserMessage(UserMessage.SUCC_USER_DELETED);
   }
 }
