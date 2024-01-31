@@ -1,4 +1,4 @@
-import { randomBytes } from 'crypto';
+import { randomBytes, randomUUID } from 'crypto';
 
 export class Random {
   public static generateRandomString(length: number) {
@@ -6,5 +6,9 @@ export class Random {
     const randomString = randomBytesBuffer.toString('hex').slice(0, length);
 
     return randomString;
+  }
+
+  public static generateUUID(): string {
+    return randomUUID();
   }
 }

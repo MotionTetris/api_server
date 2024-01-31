@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/domain/user/User';
-import { CreateUserDTO } from 'src/interfaces/user/RequestDTOs';
+import { User } from 'src/model/user/User';
+import { CreateUserDTO } from 'src/model/user/UserRequest';
 
 @Injectable()
 export class UserMapper {
@@ -9,6 +9,7 @@ export class UserMapper {
       nickname: dto.nickname,
       email: dto.email,
       password: dto.password,
+      verified: false,
     };
 
     return partialUser;

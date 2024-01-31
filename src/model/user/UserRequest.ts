@@ -17,10 +17,10 @@ export class ChangePasswordDTO {
   public readonly nickname: string;
 
   @IsString()
-  public readonly oldPassword: string;
+  public readonly old_password: string;
 
   @IsString()
-  public readonly newPassword: string;
+  public readonly new_password: string;
 }
 
 export class DeleteAccountDTO {
