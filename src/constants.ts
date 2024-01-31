@@ -2,6 +2,10 @@
 export const DOMAIN_NAME = process.env.DOMAIN_NAME;
 export const SERVER_PORT = 3000;
 
+// https setting
+export const HTTPS_KEY = process.env.HTTPS_KEY;
+export const HTTPS_CERT = process.env.HTTPS_CERT;
+
 // jwt settings
 export const JWT_SECRET = process.env.JWT_SECRET;
 
