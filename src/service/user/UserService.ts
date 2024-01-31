@@ -29,11 +29,7 @@ export class UserService {
     if (user.verifyCode !== uuid) {
       throw new UnauthorizedException();
     }
-
-    if (user.signUpIp !== ip) {
-      throw new UnauthorizedException();
-    }
-
+    
     user.verified = true;
     user.signUpIp = undefined;
     await this.userRepository.save(user);

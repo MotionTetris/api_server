@@ -1,6 +1,7 @@
 // domain settings
 export const DOMAIN_NAME = process.env.DOMAIN_NAME;
 export const SERVER_PORT = 3000;
+export const FRONTEND_URL = process.env.FRONTEND_URL;
 
 // jwt settings
 export const JWT_SECRET = process.env.JWT_SECRET;

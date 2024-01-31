@@ -1,7 +1,7 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Processor, Process, OnQueueWaiting, OnGlobalQueueFailed } from '@nestjs/bull';
-import { Injectable } from '@nestjs/common';
 import { Job } from 'bull';
+import { FRONTEND_URL } from 'src/constants';
 
 @Processor('mail')
 export class MailProcessor {
@@ -10,7 +10,7 @@ export class MailProcessor {
   @Process('sendMail')
   async sendEmail(job: Job<{ email: string; name: string; code: string }>) {
     const { email, name, code } = job.data;
-    const url = `/user/verify/${name}/${code}`;
+    const url = `${FRONTEND_URL}/user/verify/${name}/${code}`;
     await this.mailerService.sendMail({
       to: email,
       subject: '[모션 테트리스] 가입을 축하합니다.',
