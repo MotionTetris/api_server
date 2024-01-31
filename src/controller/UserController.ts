@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Ip, Param, Post, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Ip, Param, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import {
   ChangePasswordDTO,
   CreateUserDTO,
@@ -11,6 +11,8 @@ import { UserMessage, generateUserMessage } from '../model/user/UserMessage';
 import { AuthService } from 'src/service/auth/AuthService';
 import { AuthGuard } from 'src/infra/security/AuthGuard';
 import { MailService } from 'src/service/mail/MailService';
+import { Response } from 'express';
+import { FRONTEND_URL } from 'src/constants';
 
 @Controller('user')
 export class UserController {
@@ -29,9 +31,9 @@ export class UserController {
   }
 
   @Get('/verify/:nickname/:uuid')
-  async verifyUser(@Param('nickname') nickname: string, @Param('uuid') uuid: string, @Ip() ip: string) {
+  async verifyUser(@Param('nickname') nickname: string, @Param('uuid') uuid: string, @Ip() ip: string, @Res() res: Response) {
     await this.userService.verifyUser(nickname, uuid, ip);
-    return generateUserMessage(UserMessage.SUCC_VERIFY_USER);
+    res.redirect(FRONTEND_URL);
   }
 
   @Post('/signin')
