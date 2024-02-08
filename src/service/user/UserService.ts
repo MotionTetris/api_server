@@ -1,6 +1,8 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { IUserRepository } from 'src/infra/user/IUserRepository';
+import { UserMapper } from 'src/mapper/UserMapper';
 import { User } from 'src/model/user/User';
+import { UserResponseDTO } from 'src/model/user/UserResponse';
 import { HashEncryptor } from 'src/utils/Hash';
 import { Random } from 'src/utils/Random';
 
@@ -54,6 +56,7 @@ export class UserService {
   }
 
   public async getUser(nickname: string) {
-    return await this.userRepository.findByNickname(nickname);
+    const user = await this.userRepository.findByNickname(nickname);
+    return UserMapper.userToUserResponseDTO(user);
   }
 }
