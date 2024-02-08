@@ -4,6 +4,7 @@ import { UserService } from './user/UserService';
 import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
 import { AuthService } from './auth/AuthService';
 import {
+  JWT_EXPIRES,
   JWT_SECRET,
   MAIL_DEFAULTS_FROM,
   MAIL_PASSWORD,
@@ -17,7 +18,7 @@ import { MailProcessor } from 'src/infra/mail/MailProcessor';
 const JWT_MODULE_OPTION: JwtModuleOptions = {
   global: true,
   secret: JWT_SECRET,
-  signOptions: { expiresIn: '10m' },
+  signOptions: { expiresIn: JWT_EXPIRES },
 };
 
 const MAILER_OPTION: MailerOptions = {

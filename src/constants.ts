@@ -5,6 +5,7 @@ export const FRONTEND_URL = process.env.FRONTEND_URL;
 
 // jwt settings
 export const JWT_SECRET = process.env.JWT_SECRET;
+export const JWT_EXPIRES = '1h';
 
 // database settings
 export const DBMS_NAME = 'mysql';
