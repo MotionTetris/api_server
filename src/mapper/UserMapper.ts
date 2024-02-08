@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/model/user/User';
 import { CreateUserDTO } from 'src/model/user/UserRequest';
+import { UserResponseDTO } from 'src/model/user/UserResponse';
 
 @Injectable()
 export class UserMapper {
@@ -13,5 +14,16 @@ export class UserMapper {
     };
 
     return partialUser;
+  }
+
+  public static userToUserResponseDTO(user: User) {
+    const userResponse: UserResponseDTO = {
+      id: user.id,
+      email: user.email,
+      nickname: user.nickname,
+      createdAt: user.createdAt
+    }
+
+    return userResponse;
   }
 }
