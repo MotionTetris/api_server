@@ -51,7 +51,7 @@ export class UserController {
     @Ip() ip: string,
     @Res() res: Response,
   ) {
-    await this.userService.verifyUser(nickname, uuid, ip);
+    await this.userService.verifyUser(nickname, uuid);
     res.redirect(FRONTEND_URL);
   }
 
