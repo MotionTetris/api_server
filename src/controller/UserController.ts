@@ -1,4 +1,14 @@
-import { Body, Controller, Get, HttpStatus, Ip, Param, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Ip,
+  Param,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ChangePasswordDTO,
   CreateUserDTO,
@@ -26,12 +36,21 @@ export class UserController {
   async signUp(@Body() dto: CreateUserDTO, @Ip() ip: string) {
     let user = UserMapper.createUserDTOToUser(dto);
     user = await this.userService.createUser(user, ip);
-    await this.mailService.sendVerifyEmail(user.email, user.nickname, user.verifyCode);
+    await this.mailService.sendVerifyEmail(
+      user.email,
+      user.nickname,
+      user.verifyCode,
+    );
     return generateUserMessage(UserMessage.SUCC_USER_CREATED);
   }
 
   @Get('/verify/:nickname/:uuid')
-  async verifyUser(@Param('nickname') nickname: string, @Param('uuid') uuid: string, @Ip() ip: string, @Res() res: Response) {
+  async verifyUser(
+    @Param('nickname') nickname: string,
+    @Param('uuid') uuid: string,
+    @Ip() ip: string,
+    @Res() res: Response,
+  ) {
     await this.userService.verifyUser(nickname, uuid, ip);
     res.redirect(FRONTEND_URL);
   }
@@ -51,13 +70,17 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Post('/change-password')
   async changePassword(@Body() dto: ChangePasswordDTO, @Req() request: any) {
-    await this.userService.changePassword(request.user.sub, dto.old_password, dto.new_password);
+    await this.userService.changePassword(
+      request.user.sub,
+      dto.old_password,
+      dto.new_password,
+    );
     return generateUserMessage(UserMessage.SUCC_PASSWORD_CHANGED);
   }
 
   @UseGuards(AuthGuard)
   @Post('/bye')
-  async deleteAccount(@Body() dto: DeleteAccountDTO, @Req() request: any) {
+  async deleteAccount(@Body() dto: DeleteAccountDTO) {
     await this.userService.deleteUser(dto.nickname);
     return generateUserMessage(UserMessage.SUCC_USER_DELETED);
   }

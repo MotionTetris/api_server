@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { IUserRepository } from 'src/infra/user/IUserRepository';
 import { User } from 'src/model/user/User';
 import { HashEncryptor } from 'src/utils/Hash';
@@ -16,11 +16,11 @@ export class UserService {
     const createdUser = await this.userRepository.create(user);
     createdUser.verifyCode = Random.generateUUID();
     createdUser.signUpIp = ip;
-    let savedUser = await this.userRepository.save(createdUser);
+    const savedUser = await this.userRepository.save(createdUser);
     return savedUser;
   }
 
-  public async verifyUser(nickname: string, uuid: string, ip: string) {
+  public async verifyUser(nickname: string, uuid: string) {
     const user = await this.userRepository.findByNickname(nickname);
     if (user.verified) {
       throw new UnauthorizedException();
@@ -29,13 +29,17 @@ export class UserService {
     if (user.verifyCode !== uuid) {
       throw new UnauthorizedException();
     }
-    
+
     user.verified = true;
     user.signUpIp = undefined;
     await this.userRepository.save(user);
   }
 
-  public async changePassword(nickname: string, old_password: string, new_password: string) {
+  public async changePassword(
+    nickname: string,
+    old_password: string,
+    new_password: string,
+  ) {
     const user = await this.userRepository.findByNickname(nickname);
     if (old_password !== user.password) {
       throw new UnauthorizedException();
