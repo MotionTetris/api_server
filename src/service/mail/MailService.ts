@@ -10,7 +10,7 @@ export class MailService {
     await this.mailQueue.add('sendMail', {
       email: email,
       name: name,
-      code: code
+      code: code,
     });
   }
 }

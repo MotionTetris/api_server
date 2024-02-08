@@ -31,7 +31,7 @@ export class User {
   @Column({ nullable: true })
   verifyCode?: string | undefined;
 
-  @Column({ nullable: true})
+  @Column({ nullable: true })
   signUpIp?: string | undefined;
 
   @CreateDateColumn()

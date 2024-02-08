@@ -1,5 +1,5 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Processor, Process, OnQueueWaiting, OnGlobalQueueFailed } from '@nestjs/bull';
+import { Processor, Process, OnGlobalQueueFailed } from '@nestjs/bull';
 import { Job } from 'bull';
 import { FRONTEND_URL } from 'src/constants';
 
@@ -14,7 +14,7 @@ export class MailProcessor {
     await this.mailerService.sendMail({
       to: email,
       subject: '[모션 테트리스] 가입을 축하합니다.',
-      text: `가입을 축하합니다. 인증 링크: ${url}`
+      text: `가입을 축하합니다. 인증 링크: ${url}`,
     });
   }
 

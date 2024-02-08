@@ -3,7 +3,12 @@ import { PersistenceModule } from 'src/infra/PersistenceModule';
 import { UserService } from './user/UserService';
 import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
 import { AuthService } from './auth/AuthService';
-import { JWT_SECRET, MAIL_DEFAULTS_FROM, MAIL_HOST, MAIL_PASSWORD, MAIL_PORT, MAIL_REDIS_HOST, MAIL_REDIS_PORT, MAIL_USER } from 'src/constants';
+import {
+  JWT_SECRET,
+  MAIL_DEFAULTS_FROM,
+  MAIL_PASSWORD,
+  MAIL_USER,
+} from 'src/constants';
 import { MailerModule, MailerOptions } from '@nestjs-modules/mailer';
 import { MailService } from './mail/MailService';
 import { BullModule, BullModuleOptions } from '@nestjs/bull';
@@ -20,17 +25,17 @@ const MAILER_OPTION: MailerOptions = {
     service: 'gmail',
     auth: {
       user: MAIL_USER,
-      pass: MAIL_PASSWORD
+      pass: MAIL_PASSWORD,
     },
   },
   defaults: {
-    from: MAIL_DEFAULTS_FROM
+    from: MAIL_DEFAULTS_FROM,
   },
 };
 
 const MAIL_QUEUE_OPTION: BullModuleOptions = {
   name: 'mail',
-}
+};
 
 @Module({
   imports: [

@@ -1,7 +1,16 @@
 import { Module } from '@nestjs/common';
 import { ControllerModule } from './controller/ControllerModule';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { DBSERVER_HOST, DBMS_NAME, DB_PASSWORD, DB_USERNAME, DBSERVER_PORT, DB_NAME, MAIL_REDIS_HOST, MAIL_REDIS_PORT } from './constants';
+import {
+  DBSERVER_HOST,
+  DBMS_NAME,
+  DB_PASSWORD,
+  DB_USERNAME,
+  DBSERVER_PORT,
+  DB_NAME,
+  MAIL_REDIS_HOST,
+  MAIL_REDIS_PORT,
+} from './constants';
 import { BullModule } from '@nestjs/bull';
 import { APP_FILTER } from '@nestjs/core';
 import { GlobalExceptionFilter } from './filter/GlobalExceptionFilter';
@@ -17,14 +26,14 @@ const TYPEORM_MODULE_OPTION: TypeOrmModuleOptions = {
   entities: [User],
   synchronize: true,
   logging: true,
-}
+};
 
 const MAIL_REDIS_OPTION = {
   redis: {
     host: MAIL_REDIS_HOST,
-    port: MAIL_REDIS_PORT
-  }
-}
+    port: MAIL_REDIS_PORT,
+  },
+};
 
 @Module({
   imports: [
@@ -33,10 +42,11 @@ const MAIL_REDIS_OPTION = {
     BullModule.forRoot(MAIL_REDIS_OPTION),
   ],
   controllers: [],
-  providers: [{
-    provide: APP_FILTER,
-    useClass: GlobalExceptionFilter
-  },
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: GlobalExceptionFilter,
+    },
   ],
 })
 export class AppModule {}
