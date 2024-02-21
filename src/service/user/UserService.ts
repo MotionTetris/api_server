@@ -56,7 +56,6 @@ export class UserService {
   }
 
   public async getUser(nickname: string) {
-    const user = await this.userRepository.findByNickname(nickname);
-    return UserMapper.userToUserResponseDTO(user);
+    return await this.userRepository.findByNickname(nickname);
   }
 }
