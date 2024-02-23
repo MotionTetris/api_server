@@ -29,4 +29,14 @@ export class AuthService {
       access_token: await this.jwtService.signAsync(payload),
     };
   }
+
+  async guestLogin(ip: string) {
+    const guestId = `GUEST_${Math.floor(100000 + Math.random() * 900000)}`;
+    const payload = { sub: guestId, ip: ip };
+    return {
+      nickname: guestId,
+      email: 'none',
+      access_token: await this.jwtService.signAsync(payload)
+    }
+  }
 }

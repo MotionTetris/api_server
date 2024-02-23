@@ -61,6 +61,12 @@ export class UserController {
     return token;
   }
 
+  @Post('/guest')
+  async guestLogin(@Ip() ip: string) {
+    const token = await this.authService.guestLogin(ip);
+    return token;
+  }
+
   @UseGuards(AuthGuard)
   @Get('/:nickname')
   async getProfile(@Param('nickname') nickname: string) {
